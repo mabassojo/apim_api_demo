@@ -7,7 +7,7 @@ on:
 
 env:
   APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/tags/v0.6.zip'
-
+  EXTRACTED_PROJECT_PATH: .\apim_rk\v0.6\azure-api-management-devops-resource-kit-0.6\src\APIM_ARMTemplate\apimtemplate\apimtemplate.csproj"
 jobs:
   build_templates:
     name: Build ARM templates from yaml
@@ -23,7 +23,18 @@ jobs:
         run: |
           mkdir apim_rk
           cd apim_rk
+          mkdir v0.6
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}}
+          Expand-Archive -LiteralPath "v0.6.zip" -DestinationPath "v0.6"
+          cd ..
+          mkdir templates
+      - name: Generate the ARM templates using the tool
+        run: dotnet run create --configFile api.yaml --project ${{env.EXTRACTED_PROJECT_PATH}} -c "Release"
+      - name: Upload the built ARM templates
+        uses: actions/upload-artifact@main
+        with:
+          name: armtemplates
+          path: templates
          
       
   # deploy_templates:
