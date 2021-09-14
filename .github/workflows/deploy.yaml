@@ -9,8 +9,8 @@ jobs:
     name: Build ARM templates from yaml
     runs-on: windows-latest
     env:
-      APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/tags/v0.6.zip'
-      EXTRACTED_PROJECT_PATH: '.\apim_rk\v0.6\azure-api-management-devops-resource-kit-0.6\src\APIM_ARMTemplate\apimtemplate\apimtemplate.csproj'
+      APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/heads/master.zip'
+      EXTRACTED_PROJECT_PATH: '.\apim_rk\extracted\azure-api-management-devops-resource-kit-master\src\APIM_ARMTemplate\apimtemplate\apimtemplate.csproj'
     steps:
       - uses:  actions/checkout@v1
       - name: Setup dotnet '3.1.x'
@@ -22,9 +22,9 @@ jobs:
         run: |
           mkdir apim_rk
           cd apim_rk
-          mkdir v0.6
+          mkdir extracted
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .\archive.zip
-          Expand-Archive -LiteralPath ".\archive.zip" -DestinationPath ".\v0.6" -Force
+          Expand-Archive -LiteralPath ".\archive.zip" -DestinationPath ".\extracted" -Force
           cd ..
           mkdir templates
       - name: Generate the ARM templates using the tool
@@ -51,9 +51,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }} 
       - name: Deploy the Backends
-        run: az deployment group create -g 'apim-kv-pl' --template-file ".\templates\mfapim-backends.template.json" --parameters ApimServiceName=mfapim
+        run: az deployment group create -g ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file ".\templates\mfapim-backends.template.json" --parameters ApimServiceName=${{ secrets.AZURE_APIM_NAME }}
       - name: Deploy the API
-        run: az deployment group create -g 'apim-kv-pl' --template-file ".\templates\ICanHazDadJoke.api.template.json" --parameters ApimServiceName=mfapim
+        run: az deployment group create -g ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file ".\templates\ICanHazDadJoke.api.template.json" --parameters ApimServiceName=${{ secrets.AZURE_APIM_NAME }}
       - name: Azure logout
         run: az logout
       
