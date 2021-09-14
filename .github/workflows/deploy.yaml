@@ -24,7 +24,9 @@ jobs:
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .
          
       
-  deploy_templates:
-    name: Deploy ARM templates
-    needs: build_templates
-    runs-on: windows-latest
+  # deploy_templates:
+  #   name: Deploy ARM templates
+  #   needs: build_templates
+  #   runs-on: windows-latest
+  #   steps:
+
