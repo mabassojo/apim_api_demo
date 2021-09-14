@@ -1,0 +1,30 @@
+name: 'Deploy API to Azure'
+
+on: 
+  push:
+    branches:
+      - main
+
+env:
+  APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/tags/v0.6.zip'
+
+jobs:
+  build_templates:
+    name: Build ARM templates from yaml
+    runs-on: windows-latest
+    steps:
+      - uses:  actions/checkout@v1
+      - name: Setup dotnet '3.1.x'
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: Download latest APIM Resource Kit
+        shell: pwsh
+        run: |
+          Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .
+         
+      
+  deploy_templates:
+    name: Deploy ARM templates
+    needs: build_templates
+    runs-on: windows-latest
