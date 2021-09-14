@@ -7,7 +7,7 @@ on:
 
 env:
   APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/tags/v0.6.zip'
-  EXTRACTED_PROJECT_PATH: .\apim_rk\v0.6\azure-api-management-devops-resource-kit-0.6\src\APIM_ARMTemplate\apimtemplate\apimtemplate.csproj"
+  EXTRACTED_PROJECT_PATH: '.\apim_rk\v0.6\azure-api-management-devops-resource-kit-0.6\src\APIM_ARMTemplate\apimtemplate\apimtemplate.csproj'
 jobs:
   build_templates:
     name: Build ARM templates from yaml
