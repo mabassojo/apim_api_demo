@@ -21,7 +21,8 @@ jobs:
       - name: Download latest APIM Resource Kit
         shell: pwsh
         run: |
-          Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .
+          mkdir apim_rk
+          Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile './apim_rk'
          
       
   # deploy_templates:
