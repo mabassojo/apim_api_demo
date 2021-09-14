@@ -37,9 +37,26 @@ jobs:
           path: templates
          
       
-  # deploy_templates:
-  #   name: Deploy ARM templates
-  #   needs: build_templates
-  #   runs-on: windows-latest
-  #   steps:
+  deploy_templates:
+    name: Deploy ARM templates
+    needs: build_templates
+    runs-on: windows-latest
+    steps:
+      - uses: actions/download-artifact@main
+        name: Download Templates
+        with: 
+          name: armtemplates
+          path: templates
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }} 
+      - name: Deploy the Backends
+        run: az deployment group create -g ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file ".\templates\mfapim-backends.template.json" --parameters ApimServiceName=${{ secrets.AZURE_APIM_NAME }}
+      - name: Deploy the API
+        run: az deployment group create -g ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file ".\templates\ICanHazDadJoke.api.template.json" --parameters ApimServiceName=${{ secrets.AZURE_APIM_NAME }}
+      - name: Azure logout
+        run: az logout
+      
+      
 
