@@ -56,6 +56,17 @@ jobs:
         run: az deployment group create -g ${{ secrets.AZURE_RESOURCE_GROUP }} --template-file ".\templates\ICanHazDadJoke.api.template.json" --parameters ApimServiceName=${{ secrets.AZURE_APIM_NAME }}
       - name: Azure logout
         run: az logout
+  verify_api
+    name: Test the APIs
+    needs: deploy_templates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Single API
+        run: |
+          curl --request GET --url ${{ secrets.AZURE_APIM_BASE_URL }} --header 'ocp-apim-subscription-key: ${{ secrets.AZURE_APIM_SUBSCRIPTION_KEY }}'
+      - name: Call Search API
+        run: |
+          curl --request GET --url "${{ secrets.AZURE_APIM_BASE_URL }}/search" --header 'content-type: application/json' --header 'ocp-apim-subscription-key: ${{ secrets.AZURE_APIM_SUBSCRIPTION_KEY }}' --data '{"term" : "cat","page" : 1,"limit" : 5}'
       
       
 
