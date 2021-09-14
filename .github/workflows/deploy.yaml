@@ -25,7 +25,7 @@ jobs:
           cd apim_rk
           mkdir v0.6
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}}
-          Expand-Archive -LiteralPath "v0.6.zip" -DestinationPath "v0.6"
+          Expand-Archive -LiteralPath ".\v0.6.zip" -DestinationPath ".\v0.6"
           cd ..
           mkdir templates
       - name: Generate the ARM templates using the tool
