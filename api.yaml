@@ -12,6 +12,7 @@ apis:
       policy: policies/singleJoke.xml
     searchForJokes:
       policy: policies/searchJokes.xml
+  products: unlimited
 backends:
 - title: ICanHazDadJoke
   description: ICanHazDadJoke API
