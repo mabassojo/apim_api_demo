@@ -1,0 +1,21 @@
+apimServiceName: mfapim
+apis:
+- description: ICanHazDadJoke APIM Wrapper
+  displayName: ICanHazDadJoke
+  name: ICanHazDadJoke
+  openApiSpec: ./swagger/icanhazdadjoke.yml
+  openApiSpecFormat: OpenApi30_Yaml
+  policy: policies/icanhazdadjoke.xml
+  suffix: dadjoke
+  operations:
+    getRandomJoke:
+      policy: policies/singleJoke.xml
+    searchForJokes:
+      policy: policies/searchJokes.xml
+backends:
+- title: ICanHazDadJoke
+  description: ICanHazDadJoke API
+  url: https://icanhazdadjoke.com
+  protocol: http
+outputLocation: .\templates
+version: 0.0.1

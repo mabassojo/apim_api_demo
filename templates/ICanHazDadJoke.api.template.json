@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "properties": {
+        "description": "ICanHazDadJoke APIM Wrapper",
+        "isCurrent": false,
+        "subscriptionRequired": false,
+        "displayName": "ICanHazDadJoke",
+        "path": "dadjoke",
+        "protocols": [
+          "https"
+        ],
+        "value": "openapi: 3.0.0\r\ninfo:\r\n  title: ICanHazDadJoke\r\n  description: An APIM Wrapper around the ICanHazDadJoke api\r\n  version: 1.0.0\r\npaths:\r\n  /:\r\n    get:\r\n      operationId: getRandomJoke\r\n      summary: Get a Random dad joke\r\n      responses:\r\n        200:\r\n          description: 200 response\r\n          content:\r\n            application/json:\r\n              schema:\r\n                $ref: '#/components/schemas/singleJokeResponse'\r\n              examples:\r\n                default:\r\n                  value:\r\n                    id: R7UfaahVfFd\r\n                    joke: My dog used to chase people on a bike a lot. It got so bad I had to take his bike away.\r\n                    status: 200\r\n  /search:\r\n    post:\r\n      operationId: searchForJokes\r\n      summary: Search for dad jokes\r\n      requestBody:\r\n        content:\r\n          application/json:\r\n            schema:\r\n              $ref: '#/components/schemas/searchRequest'\r\n      responses:\r\n        200:\r\n          description: 200 response\r\n          content:\r\n            application/json:\r\n              schema:\r\n                $ref: '#/components/schemas/searchResponse'\r\n              examples:\r\n                default:\r\n                  value:\r\n                    current_page: 1\r\n                    limit: 20\r\n                    next_page: 2\r\n                    previous_page: 1\r\n                    results:\r\n                    - id: M7wPC5wPKBd\r\n                      joke: Did you hear the one about the guy with the broken hearing aid? Neither did he.\r\n                    - id: MRZ0LJtHQCd\r\n                      joke: What do you call a fly without wings? A walk.\r\n                    - id: usrcaMuszd\r\n                      joke: What's the worst thing about ancient history class? The teachers tend to Babylon.\r\n                    search_term: ''\r\n                    status: 200\r\n                    total_jokes: 307\r\n                    total_pages: 15\r\ncomponents:\r\n  schemas:\r\n    searchRequest:\r\n      type: object\r\n      properties:\r\n        page:\r\n          type: integer\r\n        limit:\r\n          type: integer\r\n        term:\r\n          type: string\r\n    singleJokeResponse:\r\n      type: object\r\n      properties:\r\n        id:\r\n          type: string\r\n        joke:\r\n          type: string\r\n        term:\r\n          type: integer\r\n    searchResponse:\r\n      type: object\r\n      properties:\r\n        current_page:\r\n          type: integer\r\n        limit:\r\n          type: integer\r\n        next_page:\r\n          type: integer\r\n        previous_page:\r\n          type: integer\r\n        results:\r\n          type: array\r\n          items:\r\n            type: object\r\n            properties:\r\n              id:\r\n                type: string\r\n              joke:\r\n                type: string\r\n        search_term:\r\n          type: string\r\n        status:\r\n          type: integer\r\n        total_jokes:\r\n          type: integer\r\n        total_pages:\r\n          type: integer\r\n",
+        "format": "openapi"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ICanHazDadJoke')]",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2021-01-01-preview",
+      "dependsOn": []
+    },
+    {
+      "properties": {
+        "value": "<policies>\r\n    <inbound>\r\n        <set-backend-service backend-id=\"ICanHazDadJoke\" />\r\n        <set-header name=\"Accept\" exists-action=\"override\">\r\n            <value>application/json</value>\r\n        </set-header>\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+        "format": "rawxml"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ICanHazDadJoke/policy')]",
+      "type": "Microsoft.ApiManagement/service/apis/policies",
+      "apiVersion": "2021-01-01-preview",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'ICanHazDadJoke')]"
+      ]
+    },
+    {
+      "properties": {
+        "value": "<policies>\r\n    <inbound>\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+        "format": "rawxml"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ICanHazDadJoke/getRandomJoke/policy')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "apiVersion": "2021-01-01-preview",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'ICanHazDadJoke')]"
+      ]
+    },
+    {
+      "properties": {
+        "value": "<policies>\r\n    <inbound>\r\n        <set-query-parameter name=\"term\" exists-action=\"override\">\r\n            <value>@(context.Request.Body.As<JObject>(preserveContent:true).Value<string>(\"term\"))</value>\r\n        </set-query-parameter>\r\n        <set-query-parameter name=\"page\" exists-action=\"override\">\r\n            <value>@(context.Request.Body.As<JObject>(preserveContent:true).Value<string>(\"page\"))</value>\r\n        </set-query-parameter>\r\n        <set-query-parameter name=\"limit\" exists-action=\"override\">\r\n            <value>@(context.Request.Body.As<JObject>(preserveContent:true).Value<string>(\"limit\"))</value>\r\n        </set-query-parameter>\r\n        <set-method>GET</set-method>\r\n        <base />\r\n    </inbound>\r\n    <backend>\r\n        <base />\r\n    </backend>\r\n    <outbound>\r\n        <base />\r\n    </outbound>\r\n    <on-error>\r\n        <base />\r\n    </on-error>\r\n</policies>",
+        "format": "rawxml"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/ICanHazDadJoke/searchForJokes/policy')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "apiVersion": "2021-01-01-preview",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'ICanHazDadJoke')]"
+      ]
+    }
+  ]
+}

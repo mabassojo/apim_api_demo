@@ -1,0 +1,24 @@
+<policies>
+    <inbound>
+        <set-query-parameter name="term" exists-action="override">
+            <value>@(context.Request.Body.As<JObject>(preserveContent:true).Value<string>("term"))</value>
+        </set-query-parameter>
+        <set-query-parameter name="page" exists-action="override">
+            <value>@(context.Request.Body.As<JObject>(preserveContent:true).Value<string>("page"))</value>
+        </set-query-parameter>
+        <set-query-parameter name="limit" exists-action="override">
+            <value>@(context.Request.Body.As<JObject>(preserveContent:true).Value<string>("limit"))</value>
+        </set-query-parameter>
+        <set-method>GET</set-method>
+        <base />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
