@@ -69,7 +69,7 @@ jobs:
           fi
       - name: Call Search API
         run: |
-          STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" --request GET --url "${{ secrets.AZURE_APIM_BASE_URL }}/search" --header 'content-type: application/json' --header 'ocp-apim-subscription-key: ${{ secrets.AZURE_APIM_SUBSCRIPTION_KEY }}' --data '{"term" : "cat","page" : 1,"limit" : 5}')
+          STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" --request POST --url "${{ secrets.AZURE_APIM_BASE_URL }}/search" --header 'content-type: application/json' --header 'ocp-apim-subscription-key: ${{ secrets.AZURE_APIM_SUBSCRIPTION_KEY }}' --data '{"term" : "cat","page" : 1,"limit" : 5}')
           if test $STATUSCODE -ne 200; then
             exit 1
           fi
