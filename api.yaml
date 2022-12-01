@@ -19,5 +19,5 @@ backends:
   description: ICanHazDadJoke API
   url: https://icanhazdadjoke.com
   protocol: http
-outputLocation: .\templates
+outputLocation: .\templ
 version: 0.0.1
