@@ -13,10 +13,10 @@ jobs:
       EXTRACTED_PROJECT_PATH: '.\apim_rk\extracted\azure-api-management-devops-resource-kit-master\src\APIM_ARMTemplate\apimtemplate\apimtemplate.csproj'
     steps:
       - uses:  actions/checkout@v1
-      - name: Setup dotnet '3.1.x'
+      - name: Setup dotnet '6.0.x'
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '6.0.x'
       - name: Download latest APIM Resource Kit
         shell: pwsh
         run: |
