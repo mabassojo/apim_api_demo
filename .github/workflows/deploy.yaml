@@ -28,12 +28,12 @@ jobs:
           cd ..
           mkdir templates
       - name: Generate the ARM templates using the tool
-        run: dotnet run create --configFile api.yaml --project ${{env.EXTRACTED_PROJECT_PATH}} -c "Release"
+        run: dotnet run create --configFile api.yaml template/
       - name: Upload the built ARM templates
         uses: actions/upload-artifact@main
         with:
           name: armtemplates
-          path: templates
+          path: template
          
       
   deploy_templates:
