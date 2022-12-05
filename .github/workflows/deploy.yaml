@@ -22,12 +22,13 @@ jobs:
         run: |
           mkdir apim_rk
           cd apim_rk
+          mkdir templates
           mkdir extracted
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .\archive.zip
           Expand-Archive -LiteralPath ".\archive.zip" -DestinationPath ".\extracted" -Force
-          cd ..
+          cd extracted
           pwd
-          mkdir templates
+          
       - name: Generate the ARM templates using the tool
         run: dotnet run create --configFile api.yaml templates/
       - name: Upload the built ARM templates
