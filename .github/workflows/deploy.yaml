@@ -9,7 +9,7 @@ jobs:
     name: Build ARM templates from yaml
     runs-on: windows-latest
     env:
-      APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/heads/master.zip'
+      APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/heads/main.zip'
       EXTRACTED_PROJECT_PATH: '.\apim_rk\extracted\azure-api-management-devops-resource-kit-master\src\ArmTemplates\ArmTemplates.csproj'
     steps:
       - uses:  actions/checkout@v1
@@ -22,15 +22,15 @@ jobs:
         run: |
           mkdir apim_rk
           cd apim_rk
-          mkdir templates
+          
           mkdir extracted
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .\archive.zip
           Expand-Archive -LiteralPath ".\archive.zip" -DestinationPath ".\extracted" -Force
           cd extracted
-          pwd
+          mkdir templates
           
       - name: Generate the ARM templates using the tool
-        run: dotnet run create --configFile api.yaml templates/
+        run: dotnet run create --configFile api.yaml --project ${{env.EXTRACTED_PROJECT_PATH}} -c "Release"
       - name: Upload the built ARM templates
         uses: actions/upload-artifact@main
         with:
