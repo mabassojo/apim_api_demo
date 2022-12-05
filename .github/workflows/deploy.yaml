@@ -25,15 +25,15 @@ jobs:
           mkdir extracted
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .\archive.zip
           Expand-Archive -LiteralPath ".\archive.zip" -DestinationPath ".\extracted" -Force
-          cd ..
+          cd extracted\azure-api-management-devops-resource-kit-master\src\ArmTemplates
           mkdir templates
       - name: Generate the ARM templates using the tool
-        run: dotnet run create --configFile api.yaml template/
+        run: dotnet run create --configFile api.yaml templates/
       - name: Upload the built ARM templates
         uses: actions/upload-artifact@main
         with:
           name: armtemplates
-          path: template
+          path: templates
          
       
   deploy_templates:
