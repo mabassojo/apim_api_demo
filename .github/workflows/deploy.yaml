@@ -26,7 +26,7 @@ jobs:
           mkdir extracted
           Invoke-WebRequest ${{env.APIM_RESOURCE_KIT_URI}} -outfile .\archive.zip
           Expand-Archive -LiteralPath ".\archive.zip" -DestinationPath ".\extracted" -Force
-          cd extracted
+          cd ..
           mkdir templates
           
       - name: Generate the ARM templates using the tool
