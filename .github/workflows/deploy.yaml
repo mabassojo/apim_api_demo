@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     env:
       APIM_RESOURCE_KIT_URI: 'https://github.com/Azure/azure-api-management-devops-resource-kit/archive/refs/heads/master.zip'
-      EXTRACTED_PROJECT_PATH: '.\apim_rk\extracted\azure-api-management-devops-resource-kit-master\src\APIM_ARMTemplate\apimtemplate\apimtemplate.csproj'
+      EXTRACTED_PROJECT_PATH: '.\apim_rk\extracted\azure-api-management-devops-resource-kit-master\src\ArmTemplates\ArmTemplates.csproj'
     steps:
       - uses:  actions/checkout@v1
       - name: Setup dotnet '6.0.x'
